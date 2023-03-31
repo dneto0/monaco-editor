@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<link
+			rel="stylesheet"
+			data-name="vs/editor/editor.main"
+			href="../node_modules/monaco-editor/min/vs/editor/editor.main.css"
+		/>
+	</head>
+	<body>
+		<h2>Monaco Editor Sync Loading Sample</h2>
+		<div id="container" style="width: 800px; height: 600px; border: 1px solid grey"></div>
+
+		<script>
+			var require = { paths: { vs: '../node_modules/monaco-editor/min/vs' } };
+		</script>
+		<script src="../node_modules/monaco-editor/dev/vs/loader.js"></script>
+		<script src="../node_modules/monaco-editor/dev/vs/editor/editor.main.nls.js"></script>
+		<script src="../node_modules/monaco-editor/dev/vs/editor/editor.main.js"></script>
+		<script>
+			let themename = 'GitHub';
+			themename = 'vs-dark';
+			themename = 'Cobalt';
+			themename = 'GitHub';
+			//themename = 'GitHub Dark';
+			//themename = 'GitHub Light';
+
+			console.log('hello world!');
+			let themepromise = fetch('monaco-themes/themes/' + themename + '.json').then((data) =>
+				data.json()
+			);
+
+			let text = `
+
+enable f16;
+requires v1;
+diagnostic(off,derivative_uniformity);
+
+const pi = 3.1415e0;
+const b = true;
+const c = vec2f(1);
+
+// Comment here
+
+/* a nesteed /*
+   comment
+   */
+   For the ages
+ */
+abstract NULL Self
+
+const_assert true;
+
+@vertex
+fn vmain() -> @builtin(position) vec4f {
+  const pi = 3.1415e0;
+  const b = true;
+  while (true)  {
+  }
+  loop { 
+    continuing {
+	  let x = min(1,cos(0.2));
+	}
+  }
+  return vec4f(pi);
+}
+`;
+
+			themepromise.then((d) => {
+				console.log(d);
+				monaco.editor.defineTheme('monokai', d);
+				monaco.editor.setTheme('monokai');
+				console.log('done!');
+			});
+
+			var editor = monaco.editor.create(document.getElementById('container'), {
+				value: text,
+				language: 'wgsl',
+				theme: 'monokai',
+				lineNumbers: 'off'
+			});
+		</script>
+	</body>
+</html>
